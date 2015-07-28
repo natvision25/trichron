@@ -1,0 +1,26 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "natvision",
+    "longName": "Trichron",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "fonts/spire-nbp.regular.ttf",
+                "name": "SPIRE_48",
+                "type": "font"
+            }
+        ]
+    },
+    "sdkVersion": "2",
+    "shortName": "Trichron",
+    "uuid": "365c4c87-8ca2-40de-b598-4470a34e6884",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
