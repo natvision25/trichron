@@ -8,7 +8,11 @@
                                   ~~By Natvision
  Anyone can take, use, modify, and distribute 
   this watchface for free, as long as they don't
-  take the credit. Enjoy :) */
+  take the credit. Enjoy :) 
+  
+  Also i'm 14 so don't expect sheer excellence*/
+  
+  //EDIT: 8/05/15 - Fixed 12 am and pm displaying as 0
   
 Window *window;
 TextLayer *text_layer;
@@ -17,6 +21,9 @@ InverterLayer *inverter;
 unsigned long timer = 0;
 
 int unix; //variable to hold the unix time
+int lasthour;
+int lastminute;
+int lastsecond;
 int hour; //variable for the hours
 int minute; //something to hold the minutes
 int second; //cant forget the seconds :)
@@ -28,7 +35,7 @@ void draw(Layer *this_layer, GContext *ctx){
   GPoint hourpoint = GPoint(72, 84 - (hour*5)); //Calculate the hour point
   GPoint minutepoint = GPoint(72 + minute, 84 + minute); //Calculate the minute point
   GPoint secondpoint = GPoint(72 - second, 84 + second); //Calculate the second point
-  
+
   //make the drawing colors black
   graphics_context_set_stroke_color(ctx, GColorBlack); 
   graphics_context_set_fill_color(ctx, GColorBlack);
@@ -50,6 +57,11 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 void update_time(){
   time_t temp = time(NULL);  //store the unix time in temp
   unix = temp; //unix is now temp
+  //save the last units for animation
+  lasthour = hour;
+  lastminute = minute;
+  lastsecond = second;
+  
   //calculate the current time
   hour = unix/3600%12;
   minute = unix%3600/60;
@@ -58,8 +70,13 @@ void update_time(){
   
   static char buffer[64]; //here's the buffer for the time text
 
-    if(minute < 10)snprintf(buffer, 64, "%d:0%d", hour, minute); //add a zero if the minute is less than 10. 4:6 would be wierd.
-    else snprintf(buffer, 64, "%d:%d", hour, minute); //or just print the plain time
+    if(hour == 0 && minute < 10)snprintf(buffer, 64, "12:0%d", minute); //combine the next two if statements
+    else  if(hour == 0)snprintf(buffer, 64, "12:%d", minute); //display 12 instead of 0 when it's noon or midnight, so 12:16 won't be 0:16
+    else  if(minute < 10)snprintf(buffer, 64, "%d:0%d", hour, minute); //add a zero if the minute is less than 10. 4:6 would be wierd.
+    else snprintf(buffer, 64, "%d:%d", hour, minute); //just print the plain time if none of those happen.
+  
+  
+  
     text_layer_set_text(text_layer, buffer); //update the text
   layer_mark_dirty(canvas); //update the triangle
 }
